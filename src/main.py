@@ -39,7 +39,7 @@ async def main():
     tools = [ReadFileTool(), WriteFileTool(), ExecTool()]
     system_prompt = build_system_prompt()
 
-    model = os.getenv("LLM_MODEL")
+    model = os.getenv("LLM_MODEL") or "default-model"
 
     # Single-shot mode
     # if len(sys.argv) > 1:
@@ -53,6 +53,7 @@ async def main():
     # Interactive loop
     console.print(
         "[bold]AI Assistant[/bold] — type [dim]exit[/dim] or [dim]quit[/dim] to stop\n")
+    
     while True:
         try:
             console.print("[bold cyan]you[/bold cyan]", end=" ")
