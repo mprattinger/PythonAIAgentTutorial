@@ -5,7 +5,9 @@ import os
 import litellm
 from dotenv import load_dotenv
 
+from agent.context import build_system_prompt
 from agent.loop import console, run_agent
+from agent.memory import MemoryManager
 from session.manager import SessionManager
 from tools.exec import ExecTool
 from tools.filesystem import ReadFileTool, WriteFileTool
@@ -19,25 +21,27 @@ def setup_llm():
     litellm.api_key = os.getenv("LLM_API_KEY")
 
 
-def build_system_prompt() -> str:
-    now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
-    cwd = os.getcwd()
-    return (
-        f"You are a personal AI assistant.\n"
-        f"Current date/time: {now}\n"
-        f"Current working directory: {cwd}\n"
-        f"Workspace: {WORKSPACE}\n"
-        f"When writing files, always use absolute paths unless the user explicitly specifies otherwise.\n"
-        f"Store any files you create in the workspace ({WORKSPACE}) unless the user specifies a different location.\n"
-    )
+# def build_system_prompt() -> str:
+#     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+#     cwd = os.getcwd()
+#     return (
+#         f"You are a personal AI assistant.\n"
+#         f"Current date/time: {now}\n"
+#         f"Current working directory: {cwd}\n"
+#         f"Workspace: {WORKSPACE}\n"
+#         f"When writing files, always use absolute paths unless the user explicitly specifies otherwise.\n"
+#         f"Store any files you create in the workspace ({WORKSPACE}) unless the user specifies a different location.\n"
+#     )
 
 
 async def main():
     setup_llm()
+    memory = MemoryManager()
     session = SessionManager("cli:default")
     history = session.load()
     tools = [ReadFileTool(), WriteFileTool(), ExecTool()]
-    system_prompt = build_system_prompt()
+
+    system_prompt = build_system_prompt(memory, None, None)
 
     model = os.getenv("LLM_MODEL") or "default-model"
 
