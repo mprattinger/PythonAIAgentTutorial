@@ -14,7 +14,6 @@ load_dotenv()
 
 WORKSPACE = os.path.expanduser("~/.ai-assistant/workspace")
 
-
 def setup_llm():
     litellm.api_base = os.getenv("LLM_API")
     litellm.api_key = os.getenv("LLM_API_KEY")
