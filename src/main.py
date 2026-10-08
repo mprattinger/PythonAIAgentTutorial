@@ -16,6 +16,7 @@ load_dotenv()
 
 WORKSPACE = os.path.expanduser("~/.ai-assistant/workspace")
 
+
 def setup_llm():
     litellm.api_base = os.getenv("LLM_API")
     litellm.api_key = os.getenv("LLM_API_KEY")
@@ -37,7 +38,7 @@ def setup_llm():
 async def main():
     setup_llm()
     memory = MemoryManager()
-    session = SessionManager("cli:default")
+    session = SessionManager("cli_default")
     history = session.load()
     tools = [ReadFileTool(), WriteFileTool(), ExecTool()]
 
@@ -57,7 +58,7 @@ async def main():
     # Interactive loop
     console.print(
         "[bold]AI Assistant[/bold] — type [dim]exit[/dim] or [dim]quit[/dim] to stop\n")
-    
+
     while True:
         try:
             console.print("[bold cyan]you[/bold cyan]", end=" ")

@@ -2,7 +2,9 @@ import os
 import shutil
 
 WORKSPACE = os.path.expanduser("~/.ai-assistant/workspace")
-TEMPLATES = os.path.join(os.path.dirname(__file__), "..", "workspace-templates")
+TEMPLATES = os.path.join(os.path.dirname(
+    __file__), "..", "workspace-templates")
+
 
 class MemoryManager:
     def __init__(self):
@@ -12,7 +14,7 @@ class MemoryManager:
 
     def _seed_templates(self):
         templates_dir = os.path.abspath(TEMPLATES)
-        
+
         if not os.path.isdir(templates_dir):
             return
 
@@ -25,7 +27,8 @@ class MemoryManager:
                 shutil.copy2(os.path.join(templates_dir, filename), dest)
 
     def read_all(self) -> dict[str, str]:
-        files = ["AGENTS.md", "BOOTSTRAP.md", "MEMORY.md", "SOUL.md", "USER.md"]
+        files = ["AGENTS.md", "BOOTSTRAP.md",
+                 "MEMORY.md", "SOUL.md", "USER.md"]
         result = {}
         for filename in files:
             path = os.path.join(self.workspace, filename)
@@ -39,4 +42,3 @@ class MemoryManager:
                 pass
 
         return result
-            
